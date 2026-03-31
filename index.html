@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Task Planner</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    margin: 0;
+}
+
+.container {
+    width: 420px;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+input, select {
+    width: 90%;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 5px rgba(102,126,234,0.5);
+}
+.add-btn {
+    width: 95%;
+    padding: 10px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.add-btn:hover {
+    transform: scale(1.05);
+}
+
+.date-block {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #f1f3f6;
+}
+
+.date-block h3 {
+    margin: 5px 0;
+    color: #444;
+}
+
+li {
+    list-style: none;
+    background: white;
+    margin: 6px 0;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+}
+
+li:hover {
+    transform: translateX(5px);
+    background: #f9f9f9;
+}
+
+.done {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.task-buttons button {
+    border: none;
+    padding: 5px 8px;
+    margin-left: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.complete-btn {
+    background: #28a745;
+    color: white;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+    <h2>✨ Daily Task Planner</h2>
+
+    <input type="text" id="task" placeholder="What do you want to do today?">
+    <input type="date" id="date">
+
+    <select id="category">
+        <option>📘 Study</option>
+        <option>🏠 Personal</option>
+        <option>💼 Work</option>
+    </select>
+
+    <select id="priority">
+        <option>🔥 High Priority</option>
+        <option>⚡ Medium Priority</option>
+        <option>🌿 Low Priority</option>
+    </select>
+
+    <button class="add-btn" onclick="addTask()">➕ Add Task</button>
+
+    <div id="taskContainer"></div>
+</div>
+
+<script>
+function addTask() {
+
+    let task = document.getElementById("task").value.trim();
+    let date = document.getElementById("date").value;
+    let category = document.getElementById("category").value;
+    let priority = document.getElementById("priority").value;
+
+    if (task === "" || date === "") {
+        alert("⚠ Please enter both task and date!");
+        return;
+    }
+
+    let container = document.getElementById("taskContainer");
+
+    let dateBlock = document.getElementById(date);
+
+    if (!dateBlock) {
+        dateBlock = document.createElement("div");
+        dateBlock.id = date;
+        dateBlock.className = "date-block";
+
+        let heading = document.createElement("h3");
+        heading.innerHTML = "📅 Tasks for " + date;
+
+        let ul = document.createElement("ul");
+
+        dateBlock.appendChild(heading);
+        dateBlock.appendChild(ul);
+        container.appendChild(dateBlock);
+    }
+
+    let ul = dateBlock.querySelector("ul");
+
+    let li = document.createElement("li");
+    li.innerHTML = task + " <br><small>" + category + " | " + priority + "</small>";
+
+    let btnDiv = document.createElement("div");
+    btnDiv.className = "task-buttons";
+
+    let doneBtn = document.createElement("button");
+    doneBtn.innerHTML = "✔";
+    doneBtn.className = "complete-btn";
+    doneBtn.onclick = function() {
+        li.classList.toggle("done");
+    };
+
+    let delBtn = document.createElement("button");
+    delBtn.innerHTML = "✖";
+    delBtn.className = "delete-btn";
+    delBtn.onclick = function() {
+        li.remove();
+    };
+
+    btnDiv.appendChild(doneBtn);
+    btnDiv.appendChild(delBtn);
+
+    li.appendChild(btnDiv);
+    ul.appendChild(li);
+
+    document.getElementById("task").value = "";
+}
+</script>
+
+</body>
+</html>
